@@ -3,58 +3,47 @@
 namespace App\Http\Controllers;
 
 use App\Models\Partner;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\AuthRequest;
 
 class AuthController extends Controller
 {
-    /*
+    protected AuthService $authService;
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
+    /**
      * User Registration
      */
-    public function register(Request $request)
+    public function register(AuthRequest $request)
     {
-        $fields = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed',
-        ]);
+        $fields = $request->validated();
+        $result = $this->authService->UserRegister($fields, $request);
 
-        $user = User::create($fields);
-
-        $token = $user->createToken($request->name);
-
-        return [
-            'user' => $user,
-            'token' => $token->plainTextToken
-        ];
+        return response()->json($result, 201);
     }
 
-    /*
+    /**
      * User Login
      */
-    public function login(Request $request)
+    public function login(AuthRequest $request)
     {
-        $fields = $request->validate([
-            'email' => 'required|email|exists:users',
-            'password' => 'required',
-        ]);
+        $fields = $request->validated();
+        $result = $this->authService->UserLogin($fields);
 
-        $user = User::where('email', $fields['email'])->first();
-        $token = $user->createToken($user->name);
-
-        return [
-            'user' => $user,
-            'token' => $token->plainTextToken,
-        ];
+        return response()->json($result, 201);
     }
 
-    /*
-     * User Logout
+    /**
+     * User & Partner Logout
      */
-    public function logout(Request $request)
+    public function logout(AuthRequest $request)
     {
-        $request->user()->tokens()->delete();
+        $this->authService->logout($request);
         return ['message' => 'Logged out successfully.'];
     }
 
@@ -85,13 +74,9 @@ class AuthController extends Controller
     /**
      * Partner registration
      */
-    public function partnerRegister(Request $request)
+    public function partnerRegister(AuthRequest $request)
     {
-        $fields = $request->validate([
-            'name' => 'required|string|max:255',
-            'contact_number' => 'required|string|max:255|unique:partners',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
+        $fields = $request->validated();
 
         $partner = Partner::create([
             'name' => $request->name,

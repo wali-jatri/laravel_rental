@@ -15,8 +15,8 @@ Route::get('/user', function (Request $request) {
 
 Route::apiResource('booking-requests', BookingRequestController::class)->middleware('auth:sanctum');
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login'])->name('user.login');
+Route::post('/register', [AuthController::class, 'register'])->name('user.register');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::get('users', [UserController::class, 'index'])->middleware('auth:sanctum');
@@ -31,8 +31,8 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Auth routes for partners
-Route::post('/partner-login', [AuthController::class, 'partnerLogin']);
-Route::post('/partner-register', [AuthController::class, 'partnerRegister']);
+Route::post('/partner-login', [AuthController::class, 'partnerLogin'])->name('partner.login');
+Route::post('/partner-register', [AuthController::class, 'partnerRegister'])->name('partner.register');
 Route::post('/partner-logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 
