@@ -18,6 +18,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('booking-requests', BookingRequestController::class);
-
 require __DIR__.'/auth.php';
