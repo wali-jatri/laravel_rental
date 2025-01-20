@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Bid extends Model
 {
+
+    protected $guarded = [];
+
     public function bookingRequest(): BelongsTo
     {
         return $this->belongsTo(BookingRequest::class);
