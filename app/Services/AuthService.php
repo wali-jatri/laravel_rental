@@ -1,6 +1,8 @@
 <?php
 namespace App\Services;
+use App\Models\Partner;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class AuthService{
     public function UserRegister($fields, $request)
@@ -16,7 +18,8 @@ class AuthService{
         ];
     }
 
-    public function UserLogin($fields){
+    public function UserLogin($fields)
+    {
         $user = User::where('email', $fields['email'])->first();
         $token = $user->createToken($user->name);
 
@@ -26,7 +29,42 @@ class AuthService{
         ];
     }
 
-    public function Logout($request){
+    public function Logout($request)
+    {
         $request->user()->tokens()->delete();
+    }
+
+    public function PartnerLogin($request)
+    {
+        $partner = Partner::where('contact_number', $request->contact_number)->first();
+
+        if ($partner && Hash::check($request->password, $partner->password)) {
+            $token = $partner->createToken('PartnerToken')->plainTextToken;
+
+            return response()->json([
+                'status' => 'success',
+                'token' => $token,
+            ]);
+        }
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Unauthorized',
+        ], 401);
+    }
+
+    public function PartnerRegister($request)
+    {
+        $partner = Partner::create([
+            'name' => $request->name,
+            'contact_number' => $request->contact_number,
+            'password' => Hash::make($request->password),
+        ]);
+
+        $token = $partner->createToken('PartnerToken')->plainTextToken;
+
+        return response()->json([
+            'status' => 'success',
+            'token' => $token,
+        ], 201);
     }
 }

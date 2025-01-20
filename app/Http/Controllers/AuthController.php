@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Partner;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\AuthRequest;
 
 class AuthController extends Controller
@@ -52,23 +50,7 @@ class AuthController extends Controller
      */
     public function partnerLogin(Request $request)
     {
-        $credentials = $request->only('contact_number', 'password');
-
-        $partner = Partner::where('contact_number', $request->contact_number)->first();
-
-        if ($partner && Hash::check($request->password, $partner->password)) {
-            $token = $partner->createToken('PartnerToken')->plainTextToken;
-
-            return response()->json([
-                'status' => 'success',
-                'token' => $token,
-            ]);
-        }
-
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Unauthorized',
-        ], 401);
+        return $this->authService->partnerLogin($request);
     }
 
     /**
@@ -76,19 +58,6 @@ class AuthController extends Controller
      */
     public function partnerRegister(AuthRequest $request)
     {
-        $fields = $request->validated();
-
-        $partner = Partner::create([
-            'name' => $request->name,
-            'contact_number' => $request->contact_number,
-            'password' => Hash::make($request->password),
-        ]);
-
-        $token = $partner->createToken('PartnerToken')->plainTextToken;
-
-        return response()->json([
-            'status' => 'success',
-            'token' => $token,
-        ], 201);
+        return $this->authService->partnerRegister($request);
     }
 }
