@@ -29,7 +29,6 @@ class BookingController extends Controller
      */
     public function confirmBid(ConfirmBidRequest $request, $bookingRequestId): JsonResponse
     {
-        $fields = $request->validated();
-        return $this->bookingService->getBidConfirmation($bookingRequestId, $fields);
+        return $this->bookingService->getBidConfirmation($bookingRequestId, $request['bid_id']);
     }
 }
