@@ -8,19 +8,7 @@ use App\Http\Requests\ConfirmBidRequest;
 
 class BookingController extends Controller
 {
-    /**
-     * @var BookingService
-     */
-    protected BookingService $bookingService;
-
-    /**
-     * @param BookingService $bookingService
-     * Booking Service Injection
-     */
-    public function __construct(BookingService $bookingService)
-    {
-        $this->bookingService = $bookingService;
-    }
+    public function __construct(protected BookingService $bookingService) {}
 
     /**
      * @param $bookingRequestId
@@ -41,7 +29,6 @@ class BookingController extends Controller
      */
     public function confirmBid(ConfirmBidRequest $request, $bookingRequestId): JsonResponse
     {
-        $fields = $request->validated();
-        return $this->bookingService->getBidConfirmation($bookingRequestId, $fields);
+        return $this->bookingService->getBidConfirmation($bookingRequestId, $request['bid_id']);
     }
 }

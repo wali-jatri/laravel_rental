@@ -8,11 +8,7 @@ use Illuminate\Http\JsonResponse;
 
 class PartnerController extends Controller
 {
-    protected PartnerService $partnerService;
-    public function __construct(PartnerService $partnerService)
-    {
-        $this->partnerService = $partnerService;
-    }
+    public function __construct(protected PartnerService $partnerService) {}
     public function createBiddingRequest(CreateBiddingRequest $request, $bookingRequestId): JsonResponse
     {
         $fields = $request->validated();

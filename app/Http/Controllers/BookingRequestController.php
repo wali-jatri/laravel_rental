@@ -9,11 +9,7 @@ use Illuminate\Http\JsonResponse;
 
 class BookingRequestController extends Controller
 {
-    protected BookingRequestService $bookingRequestService;
-
-    public function __construct(BookingRequestService $bookingRequestService){
-        $this->bookingRequestService = $bookingRequestService;
-    }
+    public function __construct(protected BookingRequestService $bookingRequestService) {}
 
     public function index(): JsonResponse
     {

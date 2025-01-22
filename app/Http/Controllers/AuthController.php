@@ -13,19 +13,7 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    /**
-     * @var AuthService
-     */
-    protected AuthService $authService;
-
-    /**
-     * @param AuthService $authService
-     * Auth Service Injection
-     */
-    public function __construct(AuthService $authService)
-    {
-        $this->authService = $authService;
-    }
+    public function __construct(protected AuthService $authService) {}
 
     /**
      * @param UserRegisterRequest $request
