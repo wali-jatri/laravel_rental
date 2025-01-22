@@ -2,10 +2,11 @@
 namespace App\Services;
 use App\Models\Partner;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService{
-    public function UserRegister($fields, $request)
+    public function userRegister($fields, $request): array
     {
         $user = User::create($fields);
         $token = $user->createToken($request->name);
@@ -14,11 +15,11 @@ class AuthService{
 
         return [
             'user' => $user,
-            'token' => $plainToken
+            'token' => $plainToken,
         ];
     }
 
-    public function UserLogin($fields)
+    public function userLogin($fields): array
     {
         $user = User::where('email', $fields['email'])->first();
         $token = $user->createToken($user->name);
@@ -34,7 +35,7 @@ class AuthService{
         $request->user()->tokens()->delete();
     }
 
-    public function PartnerLogin($request)
+    public function PartnerLogin($request): JsonResponse
     {
         $partner = Partner::where('contact_number', $request->contact_number)->first();
 
@@ -52,7 +53,7 @@ class AuthService{
         ], 401);
     }
 
-    public function PartnerRegister($request)
+    public function PartnerRegister($request): JsonResponse
     {
         $partner = Partner::create([
             'name' => $request->name,

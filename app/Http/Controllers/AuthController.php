@@ -2,25 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\PartnerLoginRequest;
+use App\Http\Requests\Auth\PartnerRegisterRequest;
+use App\Http\Requests\Auth\UserLoginRequest;
+use App\Http\Requests\Auth\UserRegisterRequest;
 use App\Services\AuthService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Http\Requests\AuthRequest;
+
 
 class AuthController extends Controller
 {
+    /**
+     * @var AuthService
+     */
     protected AuthService $authService;
+
+    /**
+     * @param AuthService $authService
+     * Auth Service Injection
+     */
     public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
     }
 
     /**
+     * @param UserRegisterRequest $request
      * User Registration
      */
-    public function register(AuthRequest $request)
+    public function register(UserRegisterRequest $request): JsonResponse
     {
         $fields = $request->validated();
-        $result = $this->authService->UserRegister($fields, $request);
+        $result = $this->authService->userRegister($fields, $request);
 
         return response()->json($result, 201);
     }
@@ -28,10 +42,10 @@ class AuthController extends Controller
     /**
      * User Login
      */
-    public function login(AuthRequest $request)
+    public function login(UserLoginRequest $request): JsonResponse
     {
         $fields = $request->validated();
-        $result = $this->authService->UserLogin($fields);
+        $result = $this->authService->userLogin($fields);
 
         return response()->json($result, 201);
     }
@@ -39,24 +53,24 @@ class AuthController extends Controller
     /**
      * User & Partner Logout
      */
-    public function logout(AuthRequest $request)
+    public function logout(Request $request): JsonResponse
     {
         $this->authService->logout($request);
-        return ['message' => 'Logged out successfully.'];
+        return response()->json(['message' => 'Logged out successfully.']);
     }
 
     /**
      * Partner login
      */
-    public function partnerLogin(Request $request)
+    public function partnerLogin(PartnerLoginRequest $request): JsonResponse
     {
-        return $this->authService->partnerLogin($request);
+        return $this->authService->PartnerLogin($request);
     }
 
     /**
      * Partner registration
      */
-    public function partnerRegister(AuthRequest $request)
+    public function partnerRegister(PartnerRegisterRequest $request): JsonResponse
     {
         return $this->authService->partnerRegister($request);
     }

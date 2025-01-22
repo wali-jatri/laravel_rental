@@ -2,32 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookingRequest\CreateRequest;
 use App\Models\BookingRequest;
+use App\Services\BookingRequestService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class BookingRequestController extends Controller
 {
+    protected BookingRequestService $bookingRequestService;
+
+    public function __construct(BookingRequestService $bookingRequestService){
+        $this->bookingRequestService = $bookingRequestService;
+    }
+
     public function index(): JsonResponse
     {
         $bookingRequests = BookingRequest::all();
         return response()->json($bookingRequests);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(CreateRequest $request): JsonResponse
     {
-        $request->validate([
-            'pickup_location' => 'required|string|max:255',
-            'dropoff_location' => 'required|string|max:255',
-        ]);
-
-        $bookingRequest = new BookingRequest();
-        $bookingRequest->user_id = Auth::id();
-        $bookingRequest->pickup_location = $request->input('pickup_location');
-        $bookingRequest->dropoff_location = $request->input('dropoff_location');
-        $bookingRequest->save();
-
-        return response()->json($bookingRequest);
+        $request->validated();
+        return $this->bookingRequestService->bookingRequestCreate($request);
     }
 }
