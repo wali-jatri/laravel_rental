@@ -6,16 +6,7 @@ use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller{
-
-    protected UserService $userService;
-
-    /**
-     * @param UserService $userService
-     * User Service Injection
-     */
-    public function __construct(UserService $userService){
-        $this->userService = $userService;
-    }
+    public function __construct(protected UserService $userService) {}
 
     /**
      * @return JsonResponse
