@@ -3,24 +3,28 @@ namespace App\Services;
 use App\Models\Bidding;
 use App\Models\Booking;
 
-class PartnerService{
-    public function createBidding($fields, $bookingRequestId)
+class BiddingService{
+    public function createBidding($fields, $bookingId)
     {
-        $bookingRequest = Booking::find($bookingRequestId);
+        $booking = Booking::find($bookingId);
 
-        if (!$bookingRequest) {
+        if (!$booking) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Booking request not found.',
             ], 404);
         }
 
-        return Bidding::create([
-            'booking_id' => $bookingRequest->id,
+        $biddingRequest = Bidding::create([
+            'booking_id' => $booking->id,
             'partner_id' => auth('partner')->id(),
             'driver_id' => $fields['driver_id'] ?? null,
             'vehicle_id' => $fields['vehicle_id'] ?? null,
             'bid_amount' => $fields['bid_amount'],
+        ]);
+        return response()->json([
+            'status' => 'success',
+            'message' => $biddingRequest,
         ]);
     }
 }

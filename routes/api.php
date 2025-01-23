@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\PartnerController;
+use App\Http\Controllers\BiddingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,8 +24,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::get('users', [UserController::class, 'index'])->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('partners', PartnerController::class)->middleware('auth:sanctum');
-    Route::post('/bidding-requests/{bookingId}', [PartnerController::class, 'createBiddingRequest']);
+    Route::post('/bidding-requests/{bookingId}', [BiddingController::class, 'createBiddingRequest']);
     Route::get('/booking-requests/{bookingId}/bids', [BookingController::class, 'getAvailableBids']);
     Route::post('/booking-requests/{bookingId}/confirm-bid', [BookingController::class, 'confirmBid']);
 });
