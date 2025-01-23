@@ -15,16 +15,24 @@ class BiddingService{
             ], 404);
         }
 
-        $biddingRequest = Bidding::create([
-            'booking_id' => $booking->id,
-            'partner_id' => auth('partner')->id(),
-            'driver_id' => $fields['driver_id'] ?? null,
-            'vehicle_id' => $fields['vehicle_id'] ?? null,
-            'bid_amount' => $fields['bid_amount'],
-        ]);
-        return response()->json([
-            'status' => 'success',
-            'message' => $biddingRequest,
-        ]);
+        if ($booking->status == 'PENDING') {
+            $biddingRequest = Bidding::create([
+                'booking_id' => $booking->id,
+                'partner_id' => auth('partner')->id(),
+                'driver_id' => $fields['driver_id'] ?? null,
+                'vehicle_id' => $fields['vehicle_id'] ?? null,
+                'bid_amount' => $fields['bid_amount'],
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => $biddingRequest,
+            ]);
+
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Booking request can not be confirmed.',
+            ]);
+        }
     }
 }

@@ -58,6 +58,7 @@ class BookingService
             'driver_id' => $bidding->driver_id,
             'vehicle_id' => $bidding->vehicle_id,
             'partner_id' => $bidding->partner_id,
+            'status' => 'ACCEPTED'
         ]);
 
         $bookingConfirmation = $bookingRequest->fresh();
