@@ -1,5 +1,6 @@
 <?php
 namespace App\Services;
+use App\Enums\BookingStatus;
 use App\Models\Bidding as BiddingRequest;
 use App\Models\Booking;
 use Illuminate\Http\JsonResponse;
@@ -17,7 +18,7 @@ class BookingService
     {
         $bookingRequest = new Booking();
         $bookingRequest->user_id = Auth::id();
-        $bookingRequest->status = 'PENDING';
+        $bookingRequest->status = BookingStatus::PENDING->value;
         $bookingRequest->pickup_location = $request->input('pickup_location');
         $bookingRequest->dropoff_location = $request->input('dropoff_location');
         $bookingRequest->save();
@@ -58,7 +59,7 @@ class BookingService
             'driver_id' => $bidding->driver_id,
             'vehicle_id' => $bidding->vehicle_id,
             'partner_id' => $bidding->partner_id,
-            'status' => 'ACCEPTED'
+            'status' => BookingStatus::ACCEPTED->value,
         ]);
 
         $bookingConfirmation = $bookingRequest->fresh();

@@ -1,5 +1,6 @@
 <?php
 namespace App\Services;
+use App\Enums\BookingStatus;
 use App\Models\Bidding;
 use App\Models\Booking;
 
@@ -15,7 +16,7 @@ class BiddingService{
             ], 404);
         }
 
-        if ($booking->status == 'PENDING') {
+        if ($booking->status == BookingStatus::PENDING->value) {
             $biddingRequest = Bidding::create([
                 'booking_id' => $booking->id,
                 'partner_id' => auth('partner')->id(),

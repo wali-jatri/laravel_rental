@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Partner;
+namespace App\Http\Requests\User;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Enums\BookingStatus;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateStatusRequest extends FormRequest
 {
@@ -23,15 +24,7 @@ class UpdateStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => [
-                'required',
-                'string',
-                'in:' . implode(',', [
-                    BookingStatus::IN_PROGRESS->value,
-                    BookingStatus::CANCELLED->value,
-                    BookingStatus::COMPLETED->value,
-                ]),
-            ]
+            'status' => ['required', 'string', Rule::in([BookingStatus::PENDING->value])],
         ];
     }
 }

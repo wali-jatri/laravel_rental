@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\BookingStatus;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -24,8 +25,8 @@ class ExpireBookingStatusJob implements ShouldQueue
     {
         $booking = Booking::find($this->bookingId);
 
-        if ($booking && $booking->status === 'WAITING') {
-            $booking->status = 'EXPIRED';
+        if ($booking && $booking->status === BookingStatus::WAITING->value) {
+            $booking->status = BookingStatus::EXPIRED->value;
             $booking->save();
         }
     }

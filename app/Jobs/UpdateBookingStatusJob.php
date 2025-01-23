@@ -6,6 +6,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Queue\Queueable;
+use App\Enums\BookingStatus;
 use App\Models\Booking;
 
 class UpdateBookingStatusJob implements ShouldQueue
@@ -24,8 +25,8 @@ class UpdateBookingStatusJob implements ShouldQueue
     {
         $booking = Booking::find($this->bookingId);
 
-        if ($booking && $booking->status === 'PENDING') {
-            $booking->status = 'WAITING';
+        if ($booking && $booking->status === BookingStatus::PENDING->value) {
+            $booking->status = BookingStatus::WAITING->value;
             $booking->save();
 
             ExpireBookingStatusJob::dispatch($this->bookingId)->delay(now()->addMinute());

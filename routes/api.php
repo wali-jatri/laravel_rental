@@ -22,7 +22,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('user.login');
 Route::post('/register', [AuthController::class, 'register'])->name('user.register');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::get('users', [UserController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/user/status/{bookingId}', [UserController::class, 'updateStatus'])->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/bidding-requests/{bookingId}', [BiddingController::class, 'createBiddingRequest']);

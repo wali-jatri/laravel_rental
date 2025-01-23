@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('driver_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('vehicle_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('partner_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->string('status')->default('PENDING');
+            $table->string('status')->default(\App\Enums\BookingStatus::PENDING->value);
             $table->string('pickup_location');
             $table->string('dropoff_location');
             $table->timestamps();
