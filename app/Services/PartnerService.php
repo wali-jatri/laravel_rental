@@ -1,26 +1,18 @@
 <?php
 namespace App\Services;
-use App\Models\Bidding;
+use App\Enums\BookingStatus;
 use App\Models\Booking;
+use Illuminate\Http\JsonResponse;
 
 class PartnerService{
-    public function createBidding($fields, $bookingRequestId)
+    public function updateStatus($request, $bookingId): JsonResponse
     {
-        $bookingRequest = Booking::find($bookingRequestId);
-
-        if (!$bookingRequest) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Booking request not found.',
-            ], 404);
+        $booking = Booking::find($bookingId);
+        if($booking->status == BookingStatus::ACCEPTED->value){
+            $booking->update(['status' => $request->status]);
+            return response()->json(['message' => 'Booking status updated successfully.'], 200);
+        } else {
+            return response()->json(['message' => 'Booking status cannot be updated.'], 400);
         }
-
-        return Bidding::create([
-            'booking_id' => $bookingRequest->id,
-            'partner_id' => auth('partner')->id(),
-            'driver_id' => $fields['driver_id'] ?? null,
-            'vehicle_id' => $fields['vehicle_id'] ?? null,
-            'bid_amount' => $fields['bid_amount'],
-        ]);
     }
 }

@@ -1,9 +1,11 @@
 <?php
 namespace App\Services;
+use App\Enums\BookingStatus;
 use App\Models\Bidding as BiddingRequest;
 use App\Models\Booking;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Jobs\UpdateBookingStatusJob;
 
 class BookingService
 {
@@ -16,9 +18,12 @@ class BookingService
     {
         $bookingRequest = new Booking();
         $bookingRequest->user_id = Auth::id();
+        $bookingRequest->status = BookingStatus::PENDING->value;
         $bookingRequest->pickup_location = $request->input('pickup_location');
         $bookingRequest->dropoff_location = $request->input('dropoff_location');
         $bookingRequest->save();
+
+        UpdateBookingStatusJob::dispatch($bookingRequest->id)->delay(now()->addMinutes(1));
 
         return response()->json($bookingRequest);
     }
@@ -54,6 +59,7 @@ class BookingService
             'driver_id' => $bidding->driver_id,
             'vehicle_id' => $bidding->vehicle_id,
             'partner_id' => $bidding->partner_id,
+            'status' => BookingStatus::ACCEPTED->value,
         ]);
 
         $bookingConfirmation = $bookingRequest->fresh();

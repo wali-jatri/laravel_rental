@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BiddingController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -21,21 +22,21 @@ Route::post('/login', [AuthController::class, 'login'])->name('user.login');
 Route::post('/register', [AuthController::class, 'register'])->name('user.register');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::get('users', [UserController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/user/status/{bookingId}', [UserController::class, 'updateStatus'])->middleware('auth:sanctum');
 
-
-// For partners
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('partners', PartnerController::class)->middleware('auth:sanctum');
-    Route::post('/bidding-requests/{bookingId}', [PartnerController::class, 'createBiddingRequest']);
+    Route::post('/bidding-requests/{bookingId}', [BiddingController::class, 'createBiddingRequest']);
     Route::get('/booking-requests/{bookingId}/bids', [BookingController::class, 'getAvailableBids']);
     Route::post('/booking-requests/{bookingId}/confirm-bid', [BookingController::class, 'confirmBid']);
+    Route::post('/partner/status/{bookingId}', [PartnerController::class, 'updateStatus']);
 });
 
 // Auth routes for partners
 Route::post('/partner-login', [AuthController::class, 'partnerLogin'])->name('partner.login');
 Route::post('/partner-register', [AuthController::class, 'partnerRegister'])->name('partner.register');
 Route::post('/partner-logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+
 
 
 

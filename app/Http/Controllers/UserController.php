@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\UpdateStatusRequest;
 use App\Services\UserService;
-use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller{
     public function __construct(protected UserService $userService) {}
 
-    /**
-     * @return JsonResponse
-     * Get All the Users
-     */
-    public function index(): JsonResponse
+    public function updateStatus(UpdateStatusRequest $request, $bookingId)
     {
-        return $this->userService->getAllUsers();
+        $this->userService->updateStatus($bookingId, $request);
     }
 }
