@@ -1,21 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Booking;
-use App\Enums\BookingStatus;
 use App\Http\Requests\Partner\UpdateStatusRequest;
+use App\Services\PartnerService;
 
 class PartnerController extends Controller
 {
+    public function __construct(protected PartnerService $partnerService) {}
+
     public function updateStatus(UpdateStatusRequest $request, $bookingId)
     {
-        $booking = Booking::find($bookingId);
-        if($booking->status == BookingStatus::ACCEPTED->value){
-            $booking->update(['status' => $request->status]);
-            return response()->json(['message' => 'Booking status updated successfully.'], 200);
-        } else {
-            return response()->json(['message' => 'Booking status cannot be updated.'], 400);
-        }
+        return $this->partnerService->updateStatus($bookingId, $request);
     }
 }
