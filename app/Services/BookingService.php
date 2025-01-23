@@ -4,6 +4,7 @@ use App\Models\Bidding as BiddingRequest;
 use App\Models\Booking;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Jobs\UpdateBookingStatusJob;
 
 class BookingService
 {
@@ -16,9 +17,12 @@ class BookingService
     {
         $bookingRequest = new Booking();
         $bookingRequest->user_id = Auth::id();
+        $bookingRequest->status = 'PENDING';
         $bookingRequest->pickup_location = $request->input('pickup_location');
         $bookingRequest->dropoff_location = $request->input('dropoff_location');
         $bookingRequest->save();
+
+        UpdateBookingStatusJob::dispatch($bookingRequest->id)->delay(now()->addMinutes(1));
 
         return response()->json($bookingRequest);
     }
