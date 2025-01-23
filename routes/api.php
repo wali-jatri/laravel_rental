@@ -23,8 +23,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 Route::get('users', [UserController::class, 'index'])->middleware('auth:sanctum');
 
-
-// For partners
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('partners', PartnerController::class)->middleware('auth:sanctum');
     Route::post('/bidding-requests/{bookingId}', [PartnerController::class, 'createBiddingRequest']);
