@@ -11,6 +11,8 @@ class Booking extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -23,6 +25,6 @@ class Booking extends Model
 
     public function selectedBidding(): BelongsTo
     {
-        return $this->belongsTo(Bidding::class, 'selected_bidding_id');
+        return $this->belongsTo(Bidding::class, 'bidding_id');
     }
 }

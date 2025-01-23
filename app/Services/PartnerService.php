@@ -16,7 +16,7 @@ class PartnerService{
         }
 
         return Bidding::create([
-            'booking_request_id' => $bookingRequest->id,
+            'booking_id' => $bookingRequest->id,
             'partner_id' => auth('partner')->id(),
             'driver_id' => $fields['driver_id'] ?? null,
             'vehicle_id' => $fields['vehicle_id'] ?? null,

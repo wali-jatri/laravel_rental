@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Bidding extends Model
 {
+    protected $table = 'biddings';
+
     protected $guarded = [];
 
     public function booking(): BelongsTo

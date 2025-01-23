@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('biddings', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('booking_id');
             $table->foreignId('partner_id')->constrained()->cascadeOnDelete();
             $table->foreignId('driver_id')->constrained()->cascadeOnDelete();
             $table->foreignId('vehicle_id')->constrained()->cascadeOnDelete();

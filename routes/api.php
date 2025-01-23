@@ -27,9 +27,9 @@ Route::get('users', [UserController::class, 'index'])->middleware('auth:sanctum'
 // For partners
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('partners', PartnerController::class)->middleware('auth:sanctum');
-    Route::post('/bidding-requests/{bookingRequestId}', [PartnerController::class, 'createBiddingRequest']);
-    Route::get('/booking-requests/{id}/bids', [BookingController::class, 'getAvailableBids']);
-    Route::post('/booking-requests/{id}/confirm-bid', [BookingController::class, 'confirmBid']);
+    Route::post('/bidding-requests/{bookingId}', [PartnerController::class, 'createBiddingRequest']);
+    Route::get('/booking-requests/{bookingId}/bids', [BookingController::class, 'getAvailableBids']);
+    Route::post('/booking-requests/{bookingId}/confirm-bid', [BookingController::class, 'confirmBid']);
 });
 
 // Auth routes for partners

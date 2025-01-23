@@ -22,7 +22,7 @@ class ConfirmBidRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'bid_id' => 'required|exists:bids,id',
+            'bidding_id' => 'required|exists:biddings,id',
         ];
     }
 }
