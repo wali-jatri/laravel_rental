@@ -9,7 +9,13 @@ class PartnerController extends Controller
 {
     public function updateStatus(UpdateStatusRequest $request, $bookingId)
     {
-        Booking::find($bookingId)->update(['status' => $request->status]);
-        return response()->json(['message' => 'Booking status updated successfully.'], 200);
+        $booking = Booking::find($bookingId);
+        if($booking->status == 'ACCEPTED'){
+            $booking->update(['status' => $request->status]);
+            return response()->json(['message' => 'Booking status updated successfully.'], 200);
+        } else {
+            return response()->json(['message' => 'Booking status cannot be updated.'], 400);
+        }
+
     }
 }
