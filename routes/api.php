@@ -4,7 +4,6 @@ use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BookingRequestController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 
@@ -13,7 +12,10 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::apiResource('booking-requests', BookingRequestController::class)->middleware('auth:sanctum');
+Route::prefix('booking-requests')->middleware('auth:sanctum')->group(function () {
+    Route::get('/index', [BookingController::class, 'bookingRequests']);
+    Route::post('/create', [BookingController::class, 'bookingRequestCreate']);
+});
 
 Route::post('/login', [AuthController::class, 'login'])->name('user.login');
 Route::post('/register', [AuthController::class, 'register'])->name('user.register');
@@ -25,9 +27,9 @@ Route::get('users', [UserController::class, 'index'])->middleware('auth:sanctum'
 // For partners
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('partners', PartnerController::class)->middleware('auth:sanctum');
-    Route::post('/bidding-requests/{bookingRequestId}', [PartnerController::class, 'createBiddingRequest']);
-    Route::get('/booking-requests/{id}/bids', [BookingController::class, 'getAvailableBids']);
-    Route::post('/booking-requests/{id}/confirm-bid', [BookingController::class, 'confirmBid']);
+    Route::post('/bidding-requests/{bookingId}', [PartnerController::class, 'createBiddingRequest']);
+    Route::get('/booking-requests/{bookingId}/bids', [BookingController::class, 'getAvailableBids']);
+    Route::post('/booking-requests/{bookingId}/confirm-bid', [BookingController::class, 'confirmBid']);
 });
 
 // Auth routes for partners

@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Bid extends Model
+class Bidding extends Model
 {
+    protected $table = 'biddings';
 
     protected $guarded = [];
 
-    public function bookingRequest(): BelongsTo
+    public function booking(): BelongsTo
     {
-        return $this->belongsTo(BookingRequest::class);
+        return $this->belongsTo(Booking::class);
     }
 
     public function partner(): BelongsTo

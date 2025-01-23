@@ -13,8 +13,8 @@ class Driver extends Model
         return $this->belongsTo(Partner::class);
     }
 
-    public function bids(): BelongsTo
+    public function bidding(): BelongsTo
     {
-        return $this->belongsTo(Bid::class);
+        return $this->belongsTo(Bidding::class);
     }
 }

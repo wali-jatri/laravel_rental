@@ -1,12 +1,12 @@
 <?php
 namespace App\Services;
-use App\Models\Bid;
-use App\Models\BookingRequest;
+use App\Models\Bidding;
+use App\Models\Booking;
 
 class PartnerService{
     public function createBidding($fields, $bookingRequestId)
     {
-        $bookingRequest = BookingRequest::find($bookingRequestId);
+        $bookingRequest = Booking::find($bookingRequestId);
 
         if (!$bookingRequest) {
             return response()->json([
@@ -15,8 +15,8 @@ class PartnerService{
             ], 404);
         }
 
-        return Bid::create([
-            'booking_request_id' => $bookingRequest->id,
+        return Bidding::create([
+            'booking_id' => $bookingRequest->id,
             'partner_id' => auth('partner')->id(),
             'driver_id' => $fields['driver_id'] ?? null,
             'vehicle_id' => $fields['vehicle_id'] ?? null,
