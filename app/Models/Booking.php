@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class BookingRequest extends Model
+class Booking extends Model
 {
     use HasFactory;
 
@@ -16,8 +16,13 @@ class BookingRequest extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function bids(): HasMany
+    public function bidding(): HasMany
     {
-        return $this->hasMany(Bid::class);
+        return $this->hasMany(Bidding::class);
+    }
+
+    public function selectedBidding(): BelongsTo
+    {
+        return $this->belongsTo(Bidding::class, 'selected_bidding_id');
     }
 }

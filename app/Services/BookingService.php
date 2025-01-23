@@ -1,13 +1,28 @@
 <?php
 namespace App\Services;
-use App\Http\Requests\ConfirmBidRequest;
-use App\Models\Bid as BiddingRequest;
-use App\Models\BookingConfirmation;
-use App\Models\BookingRequest;
+use App\Models\Bidding as BiddingRequest;
+use App\Models\Booking;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class BookingService
 {
+    /**
+     * @param $request
+     * @return JsonResponse
+     * Create Booking Request
+     */
+    public function bookingRequestCreate($request): JsonResponse
+    {
+        $bookingRequest = new Booking();
+        $bookingRequest->user_id = Auth::id();
+        $bookingRequest->pickup_location = $request->input('pickup_location');
+        $bookingRequest->dropoff_location = $request->input('dropoff_location');
+        $bookingRequest->save();
+
+        return response()->json($bookingRequest);
+    }
+
     /**
      * @param $bookingRequestId
      * @return JsonResponse
@@ -15,7 +30,7 @@ class BookingService
      */
     public function getAvailableBids($bookingRequestId): JsonResponse
     {
-        $bookingRequest = BookingRequest::with('bids.partner', 'bids.driver', 'bids.vehicle')->find($bookingRequestId);
+        $bookingRequest = Booking::with('bids.partner', 'bids.driver', 'bids.vehicle')->find($bookingRequestId);
         if (!$bookingRequest) return response()->json(['error' => 'Booking request not found'], 404);
         return response()->json(['bids' => $bookingRequest->bids], 200);
     }
@@ -24,17 +39,17 @@ class BookingService
      * @param $bookingRequestId
      * @param $bid_id
      * @return JsonResponse
-     * Confirm Bid
+     * Confirm Bidding
      */
     public function getBidConfirmation($bookingRequestId, $bid_id): JsonResponse
     {
-        $bookingRequest = BookingRequest::find($bookingRequestId);
+        $bookingRequest = Booking::find($bookingRequestId);
         $bid = BiddingRequest::with('partner', 'driver', 'vehicle')->find($bid_id);
 
         if (!$bookingRequest || !$bid) return response()->json(['error' => 'Invalid booking request or bid'], 404);
-        if ($bid->booking_request_id !== $bookingRequest->id) return response()->json(['error' => 'Bid does not belong to this booking request'], 400);
+        if ($bid->booking_request_id !== $bookingRequest->id) return response()->json(['error' => 'Bidding does not belong to this booking request'], 400);
 
-        $bookingConfirmation = BookingConfirmation::create([
+        $bookingConfirmation = Booking::create([
             'booking_request_id' => $bookingRequest->id,
             'bid_id' => $bid->id,
             'user_id' => $bookingRequest->user_id,
@@ -46,7 +61,7 @@ class BookingService
         ]);
 
         return response()->json([
-            'message' => 'Bid confirmed successfully',
+            'message' => 'Bidding confirmed successfully',
             'booking_confirmation' => $bookingConfirmation,
         ], 201);
     }

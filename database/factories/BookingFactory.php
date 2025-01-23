@@ -1,13 +1,13 @@
 <?php
 
 namespace Database\Factories;
-use App\Models\BookingRequest;
+use App\Models\Booking;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class BookingRequestFactory extends Factory{
-    protected $model = BookingRequest::class;
+class BookingFactory extends Factory{
+    protected $model = Booking::class;
     public function definition(): array
     {
         return [

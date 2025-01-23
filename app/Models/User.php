@@ -48,8 +48,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function bookingRequests(): HasMany
+    public function booking(): HasMany
     {
-        return $this->hasMany(BookingRequest::class);
+        return $this->hasMany(Booking::class);
     }
 }

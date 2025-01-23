@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookingRequest\CreateRequest;
+use App\Models\Booking;
 use App\Services\BookingService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\ConfirmBidRequest;
@@ -9,6 +11,27 @@ use App\Http\Requests\ConfirmBidRequest;
 class BookingController extends Controller
 {
     public function __construct(protected BookingService $bookingService) {}
+
+    /**
+     * @return JsonResponse
+     * Booking Requests for Specific User
+     */
+    public function bookingRequests(): JsonResponse
+    {
+        $user = auth()->user();
+        $bookingRequests = Booking::where('user_id', $user->id)->get();
+        return response()->json($bookingRequests);
+    }
+
+    /**
+     * @param CreateRequest $request
+     * @return JsonResponse
+     * Create Booking Request
+     */
+    public function bookingRequestCreate(CreateRequest $request): JsonResponse
+    {
+        return $this->bookingService->bookingRequestCreate($request);
+    }
 
     /**
      * @param $bookingRequestId
