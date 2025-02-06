@@ -23,14 +23,13 @@ A **Laravel-based Rental Service API** that allows **Customers** to request rent
 
 ### Step 1: Clone the Repository
 ```bash
- git clone https://github.com/your-username/rental-service-api.git
- cd rental-service-api
+ git clone https://github.com/wali-jatri/laravel_rental.git
+ cd laravel_rental
 ```
 
 ### Step 2: Install Dependencies
 ```bash
 composer install
-npm install  # (if frontend assets exist)
 ```
 
 ### Step 3: Configure Environment Variables
@@ -90,4 +89,4 @@ Your API will now be running at: **http://127.0.0.1:8000**
 5. Create a new Pull Request
 
 ## 📄 License
-This project is open-source and available under the [MIT License](LICENSE).
+This project is open-source
