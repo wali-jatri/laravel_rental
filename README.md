@@ -19,7 +19,6 @@ A **Laravel-based Rental Service API** that allows **Customers** to request rent
 - Composer
 - MySQL
 - Laravel 10+
-- Node.js & npm (for frontend integration, if needed)
 
 ### Step 1: Clone the Repository
 ```bash
